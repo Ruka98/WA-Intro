@@ -1,5 +1,5 @@
 # intro.py
-# WA+ Water Accounting Framework (IWMI) — Intro / Welcome window
+# WA+ Water Accounting Framework (IWMI) - Intro / Welcome window
 # - Overview & Workflow refined for both non-technical and technical users
 # - Methodology shown as flowcharts + concise details
 # - Data Sources tab with authoritative links
@@ -7,6 +7,7 @@
 # - Uses QTextBrowser (links work), styled, scrollable
 
 import sys
+import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel,
     QPushButton, QScrollArea, QTabWidget, QTextBrowser
@@ -18,14 +19,14 @@ from PyQt5.QtGui import QFont
 class IntroWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("WA+ Water Accounting Framework — International Water Management Institute (IWMI)")
+        self.setWindowTitle("WA+ Water Accounting Framework - International Water Management Institute (IWMI)")
         self.setGeometry(100, 100, 1000, 780)
 
         main = QWidget()
         layout = QVBoxLayout()
 
         # Title
-        title = QLabel("Water Accounting Plus (WA+) Tool")
+        title = QLabel("Customized Water Accounting Plus Tool for Jordan")
         title.setFont(QFont("Arial", 20, QFont.Bold))
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet("color:#2E86C1; margin-bottom: 16px;")
@@ -157,6 +158,9 @@ class IntroWindow(QMainWindow):
     # ---------- Content ----------
     def _overview_html(self) -> str:
         return """
+        <h2 style="color:#2E86C1;">Introduction</h2>
+        <p>Increasing water scarcity is an entrenched problem that faces Jordan. The country is naturally characterized by an arid to semi-arid climate. Water scarcity is compounded by population growth and increasing demands on limited water resources. Climate change is anticipated to reduce long-term conventional water resources (Ministry of Environment, 2021). The combined impact of these factors will likely affect all human activities and the country's economic development. The Water Efficiency and Conservation (WEC) Activity contributes to USAID/Jordan's Country Development Cooperation Strategy's (CDC: 2020-2025) five-year goals of supporting Jordan to advance its stability, prosperity, and self-reliance by spurring including private sector-led economic growth, improving water security, strengthening accountable governance, fostering a healthy, well-educated population, and enhancing the agency and leadership of women and youth. The International Water Management Institute (IWMI) is non-profit research for development organization headquartered in Colombo, Sri Lanka, with offices throughout Asia, and Africa, including a regional office for the MENA region in Egypt with a team in Jordan. IWMI is a member of the CGIAR System of international agricultural research centers, a global research partnership for a food-secure future dedicated to reducing poverty, enhancing food and nutrition security, and improving natural resources. IWMI's vision is a water-secure world, and our mission is to provide water solutions for sustainable, climate-resilient development. IWMI has conducted active research programs in Jordan since the 2000s and the latest contributions in Jordan included Monitoring & Evaluation (M&E) inputs to the USAID’s Water Innovation Technologies (WIT) project, leading the field-scale monitoring and evaluation of water savings generated from adopting water-saving technologies across agriculture and domestic sectors and communal water use.</p>
+
         <h2 style="color:#2E86C1;">What is WA+?</h2>
         <p><b>Water Accounting Plus (WA+)</b> is a standardized framework developed by the
         International Water Management Institute (IWMI) and partners to measure, monitor,
@@ -164,7 +168,7 @@ class IntroWindow(QMainWindow):
 
         <div style="background:#EBF5FB; padding:12px; border-left:5px solid #2E86C1; margin:12px 0;">
             <p style="margin:0;">
-            <b>For non-technical users:</b> WA+ is like a financial account for water — tracking each inflow,
+            <b>For non-technical users:</b> WA+ is like a financial account for water - tracking each inflow,
             outflow, and change in storage to build trust and support fair allocation.<br><br>
             <b>For technical users:</b> WA+ provides consistent definitions, spatially explicit datasets, and
             reproducible calculations for basin-scale auditing, with options to validate against independent observations.
@@ -188,18 +192,14 @@ class IntroWindow(QMainWindow):
 
         <h3 style="color:#2874A6;">WA+ Sheets (standard outputs)</h3>
         <ul>
-            <li><b>Sheet 1 — Resource Base:</b> Precipitation & inflows, outflows, ΔStorage</li>
-            <li><b>Sheet 2 — Evapotranspiration (Use):</b> ETa by land use; beneficial vs. non-beneficial</li>
-            <li><b>Sheet 3 — Productivity:</b> Biomass/crop output and water productivity</li>
-            <li><b>Sheet 4 — Withdrawals:</b> Blue-water abstractions and returns</li>
-            <li><b>Sheet 5 — Surface Water:</b> River flows, reservoirs, environmental allocations</li>
-            <li><b>Sheet 6 — Groundwater:</b> Recharge, abstraction, long-term storage changes</li>
+            <li><b>Sheet 1 - Resource Base:</b> Precipitation & inflows, outflows, ΔStorage</li>
+            <li><b>Sheet 2 - Evapotranspiration (Use):</b> ETa by land use; beneficial vs. non-beneficial</li>
         </ul>
         """
 
     def _workflow_html(self) -> str:
         return """
-        <h2 style="color:#2E86C1;">WA+ Workflow — End-to-End</h2>
+        <h2 style="color:#2E86C1;">WA+ Workflow - End-to-End</h2>
         <p>WA+ turns heterogeneous data into standard accounts through a transparent, repeatable process.</p>
 
         <div style="background:#F8F9F9; padding:14px; border:1px solid #E5E7E9; border-radius:8px;">
@@ -221,105 +221,65 @@ class IntroWindow(QMainWindow):
         """
 
     def _methodology_flowcharts_html(self) -> str:
-        # Styled flowchart blocks using simple HTML/CSS that QTextBrowser can render
-        return """
-        <style>
-          .fc-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; margin: 8px 0; }
-          .box {
-              background:#FFFFFF; border:1px solid #D6DBDF; border-radius:8px;
-              padding:10px 14px; margin:6px; min-width:160px; text-align:center;
-              box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-          }
-          .box h4 { margin: 0 0 6px 0; color:#2E86C1; }
-          .arrow { font-size: 20px; margin: 0 4px; color:#7F8C8D; }
-          .subtle { color:#616A6B; font-size: 12px; margin-top: 6px; }
-          .wrap { background:#FDFEFE; border:1px solid #ECF0F1; border-radius:10px; padding:12px; margin-bottom:14px; }
-          .title { color:#2874A6; margin: 6px 0 8px 0; }
-          .pill { display:inline-block; background:#EAF2F8; border:1px solid #AED6F1; border-radius:999px; padding:4px 10px; margin:2px; font-size:12px; }
-        </style>
+        # Resolve absolute path to flowchart image
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        img_path = os.path.join(base_dir, "flowchart.svg").replace("\\", "/")
 
-        <h2 style="color:#2E86C1;">Methodology — Flowcharts & Details</h2>
-        <p>These flowcharts show <b>how WA+</b> converts inputs into audited water accounts. Hover-style effects are not used to keep things light.</p>
+        return f"""
+        <h2 style="color:#2E86C1;">Methodology</h2>
+        <p>WA+ is a robust framework that harnesses the potential of publicly available remote sensing data to assess water resources and their consumption. Its reliance on such data is particularly beneficial in data scarce areas and transboundary basins. A significant benefit of WA+ lies in its incorporation of land use classification into water resource assessments, promoting a holistic approach to land and water management. This integration is crucial for sustaining food production amidst a changing climate, especially in regions where water is scarce. Notably, WA+ application has predominantly centered on monitoring water consumption in irrigated agriculture.</p>
 
-        <div class="wrap">
-          <h3 class="title">A) Basin Water Balance</h3>
-          <div class="fc-row">
-            <div class="box"><h4>Precipitation (P)</h4><div class="subtle">CHIRPS</div></div>
-            <div class="arrow">➕</div>
-            <div class="box"><h4>Upstream Inflows (Q<sub>in</sub>)</h4><div class="subtle">gauges / modeled</div></div>
-            <div class="arrow">➕</div>
-            <div class="box"><h4>Transfers</h4><div class="subtle">e.g., imports</div></div>
-            <div class="arrow">➜</div>
-            <div class="box"><h4>Partition</h4><div class="subtle">infiltration / runoff</div></div>
-            <div class="arrow">➜</div>
-            <div class="box"><h4>Outflows (Q<sub>out</sub>)</h4><div class="subtle">discharge</div></div>
-            <div class="arrow">➕</div>
-            <div class="box"><h4>ETa</h4><div class="subtle">SSEBop / MOD16 / GLEAM</div></div>
-            <div class="arrow">➕/➖</div>
-            <div class="box"><h4>ΔStorage</h4><div class="subtle">soil + GW + surface</div></div>
-          </div>
-          <div class="subtle">Water balance: <b>P + Q<sub>in</sub> ± transfers − (ETa + Q<sub>out</sub>) = ΔS</b></div>
+        <p>The WA+ approach builds on a simplified water balance equation for a basin (Karimi et al., 2013):</p>
+
+        <div style="background:#F8F9F9; padding:10px; margin:10px 0; border-left:4px solid #2874A6;">
+            <p style="text-align:center; font-weight:bold;">ΔS/Δt = P - ET - Q<sub>out</sub> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (1)</p>
+            <p style="font-size:12px;">Where:<br>
+            ΔS is the change in storage<br>
+            Δt is the change in time<br>
+            P is precipitation (mm/year or m³/year)<br>
+            ET is total actual evapotranspiration (mm/year or m³/year)<br>
+            Q<sub>out</sub> is total surface water outflow (mm/year or m³/year)</p>
         </div>
 
-        <div class="wrap">
-          <h3 class="title">B) ET Decomposition</h3>
-          <div class="fc-row">
-            <div class="box"><h4>ETa</h4><div class="subtle">actual consumption</div></div>
-            <div class="arrow">➜</div>
-            <div class="box"><h4>Transpiration (T)</h4><div class="subtle pill">Beneficial</div></div>
-            <div class="arrow">➕</div>
-            <div class="box"><h4>Soil Evaporation (E<sub>soil</sub>)</h4><div class="subtle pill">Non-beneficial</div></div>
-            <div class="arrow">➕</div>
-            <div class="box"><h4>Open-Water Evap (E<sub>ow</sub>)</h4><div class="subtle pill">Context</div></div>
-            <div class="arrow">➕</div>
-            <div class="box"><h4>Interception</h4><div class="subtle pill">Context</div></div>
-          </div>
-          <div class="subtle">Green vs. Blue split applied to ETa to identify rain-fed vs. managed consumption.</div>
+        <p>To utilize the WA+ approach for water budget reporting in Jordan, it is important to account for all water users, other than irrigation, and their return flows into equation 1. Also, in Jordan, man-made inflows and outflows of great importance especially in heavily populated basins (Amdar et al., 2024). Therefore, an updated water balance incorporating various sectoral water consumption in addition to inflow and outflows is proposed (Amdar et al., 2024). Hence, equation (2) represents the updated WA+ water balance equation in the context of Jordan. This modification will further be refined following detailed discussions and consultations with the WEC and MWI team to ensure complete understanding and consensus of the customized framework for Jordan.</p>
+
+        <div style="background:#F8F9F9; padding:10px; margin:10px 0; border-left:4px solid #2874A6;">
+            <p style="text-align:center; font-weight:bold;">ΔS/Δt = (P + Q<sub>in</sub>) - (ET + CW<sub>sec</sub> + Q<sub>WWT</sub> + Q<sub>re</sub> + Q<sub>natural</sub>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (2)</p>
+            <p style="font-size:12px;">Where:<br>
+            P is the total precipitation (Mm³/year)<br>
+            ET is the total actual evapotranspiration (Mm³/year)<br>
+            Q<sub>in</sub> is the total inflows into the basin consisting of both surface water inflows and any other inter-basin transfers (Mm³/year)<br>
+            Q<sub>re</sub> is the total recharge to groundwater from precipitation and return flow (Mm³/year)<br>
+            Q<sub>WWT</sub> is the total treated waste water that is returned to the river system after treatment. This could be from domestic, industry and tourism sectors (Mm³/year)<br>
+            Q<sub>natural</sub> is the naturalized streamflow from the basin (Mm³/year)<br>
+            CW<sub>sec</sub> is the total non-irrigated water use/consumption (ie water that is not returned to the system but is consumed by humans) and is given by:</p>
+
+            <p style="text-align:center; font-weight:bold;">CW<sub>sec</sub> = Supply<sub>domestic</sub> + Supply<sub>industrial</sub> + Supply<sub>livestock</sub> + Supply<sub>tourism</sub> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (3)</p>
+
+            <p style="font-size:12px;">Where:<br>
+            Supply<sub>domestic</sub> is the water supply for the domestic sector (Mm³/year)<br>
+            Supply<sub>industrial</sub> is the water supply for the industrial sector (Mm³/year)<br>
+            Supply<sub>livestock</sub> is the water supply for the livestock sector (Mm³/year)<br>
+            Supply<sub>tourism</sub> is the water supply for the tourism sector (Mm³/year)</p>
         </div>
 
-        <div class="wrap">
-          <h3 class="title">C) Land-Use Stratification</h3>
-          <div class="fc-row">
-            <div class="box"><h4>Land Cover</h4><div class="subtle">ESA CCI / national</div></div>
-            <div class="arrow">➜</div>
-            <div class="box"><h4>Protected</h4></div>
-            <div class="arrow">➕</div>
-            <div class="box"><h4>Utilized / Modified</h4></div>
-            <div class="arrow">➕</div>
-            <div class="box"><h4>Managed Water Use</h4><div class="subtle">e.g., irrigated</div></div>
-          </div>
-          <div class="subtle">All WA+ indicators are computed and reported per class for transparency.</div>
+        <p>The customized WA+ framework thus takes into account both agricultural and non-irrigated water consumption, water imports and the return of treated wastewater into the basin.</p>
+
+        <p><img src="{img_path}" width="1000"></p>
+
+        <p>During the data preparation step, various remote sensing datasets and tabular data are acquired from different sources. These datasets are then prepared for input and analyzed to select the most representative datasets for the basin of interest. This involves comparison with available in situ data, and any calibration needed to address systematic errors in the remotely sensed data.</p>
+
+        <p>During the second step, the hydrological variability of the basin is characterized by computing various water balance indicators across the watershed using a water balance model. Assessment of the water balance is the core component of the approach; water balance equations are used to describe the flow of water in and out of a system. For the customized WA+ approach for Jordan, the water balance equation is calculated following Equation 4. The change in water storage (ΔS) within a river basin (or sub-basin) is calculated over a monitoring period (Δt) as the difference between the incoming and outgoing water flows. The incoming flows consist of rainfall (precipitation; P) and manmade inflows (Q<sub>in</sub>), and the outgoing flows consist of evapotranspiration (ET), treated waste water returned to stream (Q<sub>wwt</sub>), sectorial water consumption (CW<sub>sec</sub>), and outflows (Q<sub>out</sub>).</p>
+
+        <div style="background:#F8F9F9; padding:10px; margin:10px 0; border-left:4px solid #2874A6;">
+            <p style="text-align:center; font-weight:bold;">ΔS/Δt = (P + Q<sub>in</sub>) - (ET + CW<sub>sec</sub> + Q<sub>WWT</sub> + Q<sub>natural</sub>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (4)</p>
         </div>
 
-        <div class="wrap">
-          <h3 class="title">D) Productivity Indicators</h3>
-          <div class="fc-row">
-            <div class="box"><h4>Vegetation Indices</h4><div class="subtle">MODIS NDVI/LAI</div></div>
-            <div class="arrow">➜</div>
-            <div class="box"><h4>Biomass / Yield</h4><div class="subtle">NPP proxies</div></div>
-            <div class="arrow">➗</div>
-            <div class="box"><h4>ETa (T-focused)</h4><div class="subtle">beneficial share</div></div>
-            <div class="arrow">➜</div>
-            <div class="box"><h4>Water Productivity</h4><div class="subtle">kg per m³</div></div>
-          </div>
-          <div class="subtle">Emphasis on transpiration-driven production for meaningful efficiency metrics.</div>
-        </div>
+        <p>Precipitation and evaporation data were extracted from various remote sensing datasets; data on inflows (water imports for municipal use) and outflows (streamflows from gauge stations used for runoff calibration) were acquired from provided national databases.</p>
 
-        <div class="wrap">
-          <h3 class="title">E) Validation & Review</h3>
-          <div class="fc-row">
-            <div class="box"><h4>ΔS (from balance)</h4></div>
-            <div class="arrow">⇄</div>
-            <div class="box"><h4>GRACE / GRACE-FO</h4><div class="subtle">total storage change</div></div>
-            <div class="arrow">⇄</div>
-            <div class="box"><h4>River Gauges</h4><div class="subtle">Q<sub>out</sub> checks</div></div>
-            <div class="arrow">⇄</div>
-            <div class="box"><h4>Stakeholder Review</h4><div class="subtle">context & QA</div></div>
-          </div>
-          <div class="subtle">Iterative improvement ensures credible, decision-ready accounts.</div>
-        </div>
+        <p>In the fourth step, the water balance results were validated and the model was calibrated by comparing the water balance parameters with in situ data.</p>
 
-        <p class="subtle">Outputs: WA+ Sheets (1–6), maps, charts, and time series for planning, policy, and investment.</p>
+        <p>Following this, estimated internal withdrawals, treated waste water and water imports the basin were incorporated into the WA+ toolbox. These were summarized and interpolated from national databases from the governorate level to the basin scale. A full description are provided in section 2.6.1 Basin wide water balance parameters/indicators were then presented for each major land use class (agriculture, urban and natural) through a series of water accounts. The customized WA+ toolbox is summarized in Figure 3 and definitions of the water accounting indicators and a full description of the computation of indicators are provided in Appendix A and B respectively. Briefly, on downloading and gathering remote sensing and tabular data, the observed discharge estimates are combined with the other remote sensing data (precipitation, evapotranspiration, leaf area index etc.) for the soil moisture balance modeling. The soil moisture balance model is a pixel based vertical water balance model for the unsaturated root zone of every pixel that describes the exchanges between land and atmosphere fluxes (i.e. rainfall and evapotranspiration) by partitioning flow into infiltration and surface runoff. The model calculates for each pixel, the ET that is due to rainfall ET, (ET<sub>green</sub>) and that due to additional supply termed incremental ET (ET<sub>blue</sub>) by keeping track of the soil moisture balance (Figure 3). In the final step, non-irrigated water consumption data are combined with the outputs from the soil moisture balance model to generate water accounts at the basin scale.</p>
         """
 
     def _data_html(self) -> str:
@@ -388,8 +348,8 @@ class IntroWindow(QMainWindow):
 
         <h3 style="color:#2874A6;">Key References (selected)</h3>
         <ul>
-          <li>Karimi, P., Bastiaanssen, W.G.M., et al. (2013). <i>Water Accounting Plus (WA+) — a water accounting procedure for complex river basins.</i></li>
-          <li>IWMI / IHE Delft — WA+ manuals, case studies, and methodological notes.</li>
+          <li>Karimi, P., Bastiaanssen, W.G.M., et al. (2013). <i>Water Accounting Plus (WA+) - a water accounting procedure for complex river basins.</i></li>
+          <li>IWMI / IHE Delft - WA+ manuals, case studies, and methodological notes.</li>
           <li>ET products documentation (SSEBop, MOD16, GLEAM) and CHIRPS precipitation product notes.</li>
         </ul>
 
@@ -412,7 +372,7 @@ class IntroWindow(QMainWindow):
         </ul>
 
         <h3 style="color:#2874A6;">Credits & License</h3>
-        <p>Water Accounting Plus (WA+) Tool — © 2025 IWMI, Water Accounting Team. Licensed under CC BY 4.0.
+        <p>Water Accounting Plus (WA+) Tool - &copy; 2025 IWMI, Water Accounting Team. Licensed under CC BY 4.0.
         For formal publications using WA+ outputs, obtain prior written permission from IWMI as per the included license.</p>
         """
 
