@@ -11,7 +11,7 @@ import os
 import base64
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel,
-    QPushButton, QScrollArea, QTabWidget, QTextBrowser
+    QPushButton, QScrollArea, QTabWidget, QTextBrowser, QSizePolicy
 )
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtCore import Qt, QTimer
@@ -115,23 +115,41 @@ class IntroWindow(QMainWindow):
         v_layout = QVBoxLayout()
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
+
+        # Create a single seamless content widget with white background
         content_widget = QWidget()
+        content_widget.setStyleSheet("background-color: white;")
         content_layout = QVBoxLayout()
+        # Add some padding around the edges
+        content_layout.setContentsMargins(10, 10, 10, 10)
 
         # Part 1: Text content before the flowchart
-        text_part1 = self._browser(self._methodology_html_part1())
-        content_layout.addWidget(text_part1)
+        # Use QLabel to ensure it expands fully without internal scrollbars
+        lbl_part1 = QLabel(self._methodology_html_part1())
+        lbl_part1.setWordWrap(True)
+        lbl_part1.setOpenExternalLinks(True)
+        lbl_part1.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.LinksAccessibleByMouse)
+        lbl_part1.setStyleSheet("border: none; padding: 14px;")
+        content_layout.addWidget(lbl_part1)
 
         # Part 2: The flowchart SVG image
         base_dir = os.path.dirname(os.path.abspath(__file__))
         img_path = os.path.join(base_dir, "flowchart.svg")
         svg_widget = QSvgWidget(img_path)
-        svg_widget.setMinimumSize(960, 600)
+        # Fix size to fit comfortably within the 1000px window width (approx 960 viewable)
+        svg_widget.setFixedSize(900, 600)
         content_layout.addWidget(svg_widget, alignment=Qt.AlignCenter)
 
-        # Part 3: Text content after the flowchart
-        text_part2 = self._browser(self._methodology_html_part2())
-        content_layout.addWidget(text_part2)
+        # Part 3: Text content after the flowchart (Caption + Text)
+        lbl_part2 = QLabel(self._methodology_html_part2())
+        lbl_part2.setWordWrap(True)
+        lbl_part2.setOpenExternalLinks(True)
+        lbl_part2.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.LinksAccessibleByMouse)
+        lbl_part2.setStyleSheet("border: none; padding: 14px;")
+        content_layout.addWidget(lbl_part2)
+
+        # Add stretch to push content up if needed (though content is long enough)
+        content_layout.addStretch()
 
         content_widget.setLayout(content_layout)
         scroll.setWidget(content_widget)
@@ -240,41 +258,53 @@ class IntroWindow(QMainWindow):
 
     def _methodology_html_part1(self) -> str:
         return """
-        <h2 style="color:#2E86C1;">Methodology</h2>
+        <h2 style="color:#2E86C1;">Customized WA+ Analytical Framework for Jordan</h2>
         <p>WA+ is a robust framework that harnesses the potential of publicly available remote sensing data to assess water resources and their consumption. Its reliance on such data is particularly beneficial in data scarce areas and transboundary basins. A significant benefit of WA+ lies in its incorporation of land use classification into water resource assessments, promoting a holistic approach to land and water management. This integration is crucial for sustaining food production amidst a changing climate, especially in regions where water is scarce. Notably, WA+ application has predominantly centered on monitoring water consumption in irrigated agriculture.</p>
 
         <p>The WA+ approach builds on a simplified water balance equation for a basin (Karimi et al., 2013):</p>
 
         <div style="background:#F8F9F9; padding:10px; margin:10px 0; border-left:4px solid #2874A6;">
-            <p style="text-align:center; font-weight:bold;">ΔS/Δt = P - ET - Q<sub>out</sub> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (1)</p>
-            <p style="font-size:12px;">Where:<br>
-            ΔS is the change in storage<br>
-            Δt is the change in time<br>
-            P is precipitation (mm/year or m³/year)<br>
-            ET is total actual evapotranspiration (mm/year or m³/year)<br>
-            Q<sub>out</sub> is total surface water outflow (mm/year or m³/year)</p>
+            <p style="text-align:center; font-family:'Times New Roman', serif; font-size:16px;">
+            <i>&Delta;S</i>/<i>&Delta;t</i> = <i>P</i> - <i>ET</i> - <i>Q<sub>out</sub></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (1)
+            </p>
+            <p style="font-size:14px; margin-left:20px;">
+            Where:<br>
+            <i>&Delta;S</i> is the change in storage<br>
+            <i>&Delta;t</i> is the change in time<br>
+            <i>P</i> is precipitation (mm/year or m<sup>3</sup>/year)<br>
+            <i>ET</i> is total actual evapotranspiration (mm/year or m<sup>3</sup>/year)<br>
+            <i>Q<sub>out</sub></i> is total surface water outflow (mm/year or m<sup>3</sup>/year)
+            </p>
         </div>
 
         <p>To utilize the WA+ approach for water budget reporting in Jordan, it is important to account for all water users, other than irrigation, and their return flows into equation 1. Also, in Jordan, man-made inflows and outflows of great importance especially in heavily populated basins (Amdar et al., 2024). Therefore, an updated water balance incorporating various sectoral water consumption in addition to inflow and outflows is proposed (Amdar et al., 2024). Hence, equation (2) represents the updated WA+ water balance equation in the context of Jordan. This modification will further be refined following detailed discussions and consultations with the WEC and MWI team to ensure complete understanding and consensus of the customized framework for Jordan.</p>
 
         <div style="background:#F8F9F9; padding:10px; margin:10px 0; border-left:4px solid #2874A6;">
-            <p style="text-align:center; font-weight:bold;">ΔS/Δt = (P + Q<sub>in</sub>) - (ET + CW<sub>sec</sub> + Q<sub>WWT</sub> + Q<sub>re</sub> + Q<sub>natural</sub>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (2)</p>
-            <p style="font-size:12px;">Where:<br>
-            P is the total precipitation (Mm³/year)<br>
-            ET is the total actual evapotranspiration (Mm³/year)<br>
-            Q<sub>in</sub> is the total inflows into the basin consisting of both surface water inflows and any other inter-basin transfers (Mm³/year)<br>
-            Q<sub>re</sub> is the total recharge to groundwater from precipitation and return flow (Mm³/year)<br>
-            Q<sub>WWT</sub> is the total treated waste water that is returned to the river system after treatment. This could be from domestic, industry and tourism sectors (Mm³/year)<br>
-            Q<sub>natural</sub> is the naturalized streamflow from the basin (Mm³/year)<br>
-            CW<sub>sec</sub> is the total non-irrigated water use/consumption (ie water that is not returned to the system but is consumed by humans) and is given by:</p>
+            <p style="text-align:center; font-family:'Times New Roman', serif; font-size:16px;">
+            <i>&Delta;S</i>/<i>&Delta;t</i> = (<i>P</i> + <i>Q<sub>in</sub></i>) - (<i>ET</i> + <i>CW<sub>sec</sub></i> + <i>Q<sub>WWT</sub></i> + <i>Q<sub>re</sub></i> + <i>Q<sub>natural</sub></i>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (2)
+            </p>
+            <p style="font-size:14px; margin-left:20px;">
+            Where:<br>
+            <i>P</i> is the total precipitation (Mm<sup>3</sup>/year)<br>
+            <i>ET</i> is the total actual evapotranspiration (Mm<sup>3</sup>/year)<br>
+            <i>Q<sub>in</sub></i> is the total inflows into the basin consisting of both surface water inflows and any other inter-basin transfers (Mm<sup>3</sup>/year)<br>
+            <i>Q<sub>re</sub></i> is the total recharge to groundwater from precipitation and return flow (Mm<sup>3</sup>/year)<br>
+            <i>Q<sub>WWT</sub></i> is the total treated waste water that is returned to the river system after treatment. This could be from domestic, industry and tourism sectors (Mm<sup>3</sup>/year)<br>
+            <i>Q<sub>natural</sub></i> is the naturalized streamflow from the basin (Mm<sup>3</sup>/year)<br>
+            <i>CW<sub>sec</sub></i> is the total non-irrigated water use/consumption (ie water that is not returned to the system but is consumed by humans) and is given by:
+            </p>
 
-            <p style="text-align:center; font-weight:bold;">CW<sub>sec</sub> = Supply<sub>domestic</sub> + Supply<sub>industrial</sub> + Supply<sub>livestock</sub> + Supply<sub>tourism</sub> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (3)</p>
+            <p style="text-align:center; font-family:'Times New Roman', serif; font-size:16px;">
+            <i>CW<sub>sec</sub></i> = <i>Supply<sub>domestic</sub></i> + <i>Supply<sub>industrial</sub></i> + <i>Supply<sub>livestock</sub></i> + <i>Supply<sub>tourism</sub></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (3)
+            </p>
 
-            <p style="font-size:12px;">Where:<br>
-            Supply<sub>domestic</sub> is the water supply for the domestic sector (Mm³/year)<br>
-            Supply<sub>industrial</sub> is the water supply for the industrial sector (Mm³/year)<br>
-            Supply<sub>livestock</sub> is the water supply for the livestock sector (Mm³/year)<br>
-            Supply<sub>tourism</sub> is the water supply for the tourism sector (Mm³/year)</p>
+            <p style="font-size:14px; margin-left:20px;">
+            Where:<br>
+            <i>Supply<sub>domestic</sub></i> is the water supply for the domestic sector (Mm<sup>3</sup>/year)<br>
+            <i>Supply<sub>industrial</sub></i> is the water supply for the industrial sector (Mm<sup>3</sup>/year)<br>
+            <i>Supply<sub>livestock</sub></i> is the water supply for the livestock sector (Mm<sup>3</sup>/year)<br>
+            <i>Supply<sub>tourism</sub></i> is the water supply for the tourism sector (Mm<sup>3</sup>/year)
+            </p>
         </div>
 
         <p>The customized WA+ framework thus takes into account both agricultural and non-irrigated water consumption, water imports and the return of treated wastewater into the basin.</p>
@@ -282,19 +312,27 @@ class IntroWindow(QMainWindow):
 
     def _methodology_html_part2(self) -> str:
         return """
+        <div style="text-align:center; font-weight:bold; margin:10px 0 20px 0; color:#2E86C1;">
+            Figure 2. The WA+ toolbox: main processing modules of the customized WA+ Framework for Jordan.
+        </div>
+
+        <p>Implementation of the WA+ framework involves automated collection, pre-processing and computation of the water balance for a river basin and its sub-basins through the WA+ toolbox. The customized framework for the Amman Zarqa basin consists of six major steps to calculate and present the water accounts: data download and pre-processing, water balance modeling, calibration/validation of streamflow, estimation of non-agricultural water consumption, generation of water accounts, and interpretation and presentation of results.</p>
+
         <p>During the data preparation step, various remote sensing datasets and tabular data are acquired from different sources. These datasets are then prepared for input and analyzed to select the most representative datasets for the basin of interest. This involves comparison with available in situ data, and any calibration needed to address systematic errors in the remotely sensed data.</p>
 
-        <p>During the second step, the hydrological variability of the basin is characterized by computing various water balance indicators across the watershed using a water balance model. Assessment of the water balance is the core component of the approach; water balance equations are used to describe the flow of water in and out of a system. For the customized WA+ approach for Jordan, the water balance equation is calculated following Equation 4. The change in water storage (ΔS) within a river basin (or sub-basin) is calculated over a monitoring period (Δt) as the difference between the incoming and outgoing water flows. The incoming flows consist of rainfall (precipitation; P) and manmade inflows (Q<sub>in</sub>), and the outgoing flows consist of evapotranspiration (ET), treated waste water returned to stream (Q<sub>wwt</sub>), sectorial water consumption (CW<sub>sec</sub>), and outflows (Q<sub>out</sub>).</p>
+        <p>During the second step, the hydrological variability of the basin is characterized by computing various water balance indicators across the watershed using a water balance model. Assessment of the water balance is the core component of the approach; water balance equations are used to describe the flow of water in and out of a system. For the customized WA+ approach for Jordan, the water balance equation is calculated following Equation 4. The change in water storage (<i>&Delta;S</i>) within a river basin (or sub-basin) is calculated over a monitoring period (<i>&Delta;t</i>) as the difference between the incoming and outgoing water flows. The incoming flows consist of rainfall (precipitation; <i>P</i>) and manmade inflows (<i>Q<sub>in</sub></i>), and the outgoing flows consist of evapotranspiration (<i>ET</i>), treated waste water returned to stream (<i>Q<sub>wwt</sub></i>), sectorial water consumption (<i>CW<sub>sec</sub></i>), and outflows (<i>Q<sub>out</sub></i>).</p>
 
         <div style="background:#F8F9F9; padding:10px; margin:10px 0; border-left:4px solid #2874A6;">
-            <p style="text-align:center; font-weight:bold;">ΔS/Δt = (P + Q<sub>in</sub>) - (ET + CW<sub>sec</sub> + Q<sub>WWT</sub> + Q<sub>natural</sub>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (4)</p>
+            <p style="text-align:center; font-family:'Times New Roman', serif; font-size:16px;">
+            <i>&Delta;S</i>/<i>&Delta;t</i> = (<i>P</i> + <i>Q<sub>in</sub></i>) - (<i>ET</i> + <i>CW<sub>sec</sub></i> + <i>Q<sub>WWT</sub></i> + <i>Q<sub>natural</sub></i>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (4)
+            </p>
         </div>
 
         <p>Precipitation and evaporation data were extracted from various remote sensing datasets; data on inflows (water imports for municipal use) and outflows (streamflows from gauge stations used for runoff calibration) were acquired from provided national databases.</p>
 
         <p>In the fourth step, the water balance results were validated and the model was calibrated by comparing the water balance parameters with in situ data.</p>
 
-        <p>Following this, estimated internal withdrawals, treated waste water and water imports the basin were incorporated into the WA+ toolbox. These were summarized and interpolated from national databases from the governorate level to the basin scale. A full description are provided in section 2.6.1 Basin wide water balance parameters/indicators were then presented for each major land use class (agriculture, urban and natural) through a series of water accounts. The customized WA+ toolbox is summarized in Figure 3 and definitions of the water accounting indicators and a full description of the computation of indicators are provided in Appendix A and B respectively. Briefly, on downloading and gathering remote sensing and tabular data, the observed discharge estimates are combined with the other remote sensing data (precipitation, evapotranspiration, leaf area index etc.) for the soil moisture balance modeling. The soil moisture balance model is a pixel based vertical water balance model for the unsaturated root zone of every pixel that describes the exchanges between land and atmosphere fluxes (i.e. rainfall and evapotranspiration) by partitioning flow into infiltration and surface runoff. The model calculates for each pixel, the ET that is due to rainfall ET, (ET<sub>green</sub>) and that due to additional supply termed incremental ET (ET<sub>blue</sub>) by keeping track of the soil moisture balance (Figure 3). In the final step, non-irrigated water consumption data are combined with the outputs from the soil moisture balance model to generate water accounts at the basin scale.</p>
+        <p>Following this, estimated internal withdrawals, treated waste water and water imports the basin were incorporated into the WA+ toolbox. These were summarized and interpolated from national databases from the governorate level to the basin scale. A full description is provided in section 2.6.1. Basin wide water balance parameters/indicators were then presented for each major land use class (agriculture, urban and natural) through a series of water accounts. The customized WA+ toolbox is summarized in Figure 2 and definitions of the water accounting indicators and a full description of the computation of indicators are provided in Appendix A and B respectively. Briefly, on downloading and gathering remote sensing and tabular data, the observed discharge estimates are combined with the other remote sensing data (precipitation, evapotranspiration, leaf area index etc.) for the soil moisture balance modeling. The soil moisture balance model is a pixel based vertical water balance model for the unsaturated root zone of every pixel that describes the exchanges between land and atmosphere fluxes (i.e. rainfall and evapotranspiration) by partitioning flow into infiltration and surface runoff. The model calculates for each pixel, the ET that is due to rainfall ET (<i>ET<sub>green</sub></i>) and that due to additional supply termed incremental ET (<i>ET<sub>blue</sub></i>) by keeping track of the soil moisture balance (Figure 2). In the final step, non-irrigated water consumption data are combined with the outputs from the soil moisture balance model to generate water accounts at the basin scale.</p>
         """
 
     def _data_html(self) -> str:
