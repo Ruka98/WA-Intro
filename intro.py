@@ -157,6 +157,7 @@ class IntroWindow(QMainWindow):
     # ---------- Content ----------
     def _overview_html(self) -> str:
         return """
+        <h2 style="color:#2E86C1;">Introduction</h2>
         <p>Increasing water scarcity is an entrenched problem that faces Jordan. The country is naturally characterized by an arid to semi-arid climate. Water scarcity is compounded by population growth and increasing demands on limited water resources. Climate change is anticipated to reduce long-term conventional water resources (Ministry of Environment, 2021). The combined impact of these factors will likely affect all human activities and the country's economic development. The Water Efficiency and Conservation (WEC) Activity contributes to USAID/Jordan's Country Development Cooperation Strategy's (CDC: 2020-2025) five-year goals of supporting Jordan to advance its stability, prosperity, and self-reliance by spurring including private sector-led economic growth, improving water security, strengthening accountable governance, fostering a healthy, well-educated population, and enhancing the agency and leadership of women and youth. The International Water Management Institute (IWMI) is non-profit research for development organization headquartered in Colombo, Sri Lanka, with offices throughout Asia, and Africa, including a regional office for the MENA region in Egypt with a team in Jordan. IWMI is a member of the CGIAR System of international agricultural research centers, a global research partnership for a food-secure future dedicated to reducing poverty, enhancing food and nutrition security, and improving natural resources. IWMI's vision is a water-secure world, and our mission is to provide water solutions for sustainable, climate-resilient development. IWMI has conducted active research programs in Jordan since the 2000s and the latest contributions in Jordan included Monitoring & Evaluation (M&E) inputs to the USAID’s Water Innovation Technologies (WIT) project, leading the field-scale monitoring and evaluation of water savings generated from adopting water-saving technologies across agriculture and domestic sectors and communal water use.</p>
 
         <h2 style="color:#2E86C1;">What is WA+?</h2>
@@ -259,7 +260,79 @@ class IntroWindow(QMainWindow):
 
         <p>The customized WA+ framework thus takes into account both agricultural and non-irrigated water consumption, water imports and the return of treated wastewater into the basin.</p>
 
-        <p><img src="safcsvf.png" width="800"></p>
+        <style>
+          .fc-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; margin: 8px 0; }
+          .box {
+              background:#FFFFFF; border:1px solid #D6DBDF; border-radius:8px;
+              padding:10px 14px; margin:6px; min-width:160px; text-align:center;
+              box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+          }
+          .green-box { background:#D5F5E3; border:1px solid #2ECC71; }
+          .blue-box { background:#D6EAF8; border:1px solid #3498DB; }
+          .beige-box { background:#FCF3CF; border:1px solid #F1C40F; }
+          .yellow-box { background:#F9E79F; border:1px solid #F4D03F; }
+          .grey-box { background:#E5E7E9; border:1px solid #BDC3C7; }
+
+          .box h4 { margin: 0 0 6px 0; color:#2E86C1; }
+          .arrow { font-size: 20px; margin: 0 4px; color:#7F8C8D; }
+          .subtle { color:#616A6B; font-size: 12px; margin-top: 6px; }
+          .wrap { background:#FDFEFE; border:1px solid #ECF0F1; border-radius:10px; padding:12px; margin-bottom:14px; }
+        </style>
+
+        <div class="wrap">
+            <h3 style="color:#2874A6; text-align:center;">Customized WA+ Workflow</h3>
+
+            <!-- Row 1: Remote Sensing -->
+            <div class="fc-row">
+                <div class="box green-box">
+                    <h4>WA+ Toolbox</h4>
+                    <div class="subtle">Data Download & Spatial Analysis<br>Preprocessing (Resampling, Projecting, Clipping)</div>
+                </div>
+                <div class="arrow">➜</div>
+                <div class="box blue-box">
+                    <h4>SM Balance</h4>
+                    <div class="subtle">Water Balance Modeling</div>
+                </div>
+                <div class="arrow">⇄</div>
+                <div class="box beige-box">
+                    <h4>GR Models</h4>
+                    <div class="subtle">Flow Estimation</div>
+                </div>
+            </div>
+
+            <!-- Row 2: Non-Ag Inputs -->
+            <div class="fc-row">
+                <div class="box yellow-box">
+                    <h4>Non-Agricultural Inputs</h4>
+                    <div class="subtle">Water Imports<br>Consumption (Domestic/Tourism/Livestock)<br>Return Wastewater</div>
+                </div>
+                <div class="arrow">➜</div>
+                <div class="box beige-box">
+                    <h4>Calibration / Validation</h4>
+                    <div class="subtle">Compare with In-situ Data</div>
+                </div>
+            </div>
+
+            <!-- Connection from Models to Calibration -->
+            <div style="text-align:center; color:#7F8C8D; font-size:12px;">(Models also feed into Calibration)</div>
+
+            <!-- Row 3: Output -->
+            <div class="fc-row">
+                <div class="box beige-box">
+                    <h4>Calibration / Validation</h4>
+                </div>
+                <div class="arrow">➜</div>
+                <div class="box yellow-box">
+                    <h4>WA Hydroloop</h4>
+                    <div class="subtle">Generation of Water Accounts<br>Sheets, Tables, Maps</div>
+                </div>
+                <div class="arrow">➜</div>
+                <div class="box grey-box">
+                    <h4>Interpretation</h4>
+                    <div class="subtle">Reporting</div>
+                </div>
+            </div>
+        </div>
 
         <p>During the data preparation step, various remote sensing datasets and tabular data are acquired from different sources. These datasets are then prepared for input and analyzed to select the most representative datasets for the basin of interest. This involves comparison with available in situ data, and any calibration needed to address systematic errors in the remotely sensed data.</p>
 
