@@ -8,11 +8,13 @@
 
 import sys
 import os
+import base64
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel,
     QPushButton, QScrollArea, QTabWidget, QTextBrowser
 )
-from PyQt5.QtCore import Qt
+from PyQt5.QtSvg import QSvgWidget
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont
 
 
@@ -109,16 +111,32 @@ class IntroWindow(QMainWindow):
         self.tabs.addTab(tab, "Workflow")
 
     def _add_methodology_tab(self):
-        tab = QWidget(); v = QVBoxLayout()
-        scroll = QScrollArea(); scroll.setWidgetResizable(True)
-        content = QWidget(); cv = QVBoxLayout()
+        tab = QWidget()
+        v_layout = QVBoxLayout()
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        content_widget = QWidget()
+        content_layout = QVBoxLayout()
 
-        w = self._browser(self._methodology_flowcharts_html())
-        cv.addWidget(w)
-        content.setLayout(cv)
-        scroll.setWidget(content)
-        v.addWidget(scroll)
-        tab.setLayout(v)
+        # Part 1: Text content before the flowchart
+        text_part1 = self._browser(self._methodology_html_part1())
+        content_layout.addWidget(text_part1)
+
+        # Part 2: The flowchart SVG image
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        img_path = os.path.join(base_dir, "flowchart.svg")
+        svg_widget = QSvgWidget(img_path)
+        svg_widget.setMinimumSize(960, 600)
+        content_layout.addWidget(svg_widget, alignment=Qt.AlignCenter)
+
+        # Part 3: Text content after the flowchart
+        text_part2 = self._browser(self._methodology_html_part2())
+        content_layout.addWidget(text_part2)
+
+        content_widget.setLayout(content_layout)
+        scroll.setWidget(content_widget)
+        v_layout.addWidget(scroll)
+        tab.setLayout(v_layout)
         self.tabs.addTab(tab, "Methodology (Flowcharts)")
 
     def _add_data_tab(self):
@@ -220,12 +238,8 @@ class IntroWindow(QMainWindow):
         analysis and reporting are consistent and reproducible.</p>
         """
 
-    def _methodology_flowcharts_html(self) -> str:
-        # Resolve absolute path to flowchart image
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        img_path = os.path.join(base_dir, "flowchart.svg").replace("\\", "/")
-
-        return f"""
+    def _methodology_html_part1(self) -> str:
+        return """
         <h2 style="color:#2E86C1;">Methodology</h2>
         <p>WA+ is a robust framework that harnesses the potential of publicly available remote sensing data to assess water resources and their consumption. Its reliance on such data is particularly beneficial in data scarce areas and transboundary basins. A significant benefit of WA+ lies in its incorporation of land use classification into water resource assessments, promoting a holistic approach to land and water management. This integration is crucial for sustaining food production amidst a changing climate, especially in regions where water is scarce. Notably, WA+ application has predominantly centered on monitoring water consumption in irrigated agriculture.</p>
 
@@ -264,9 +278,10 @@ class IntroWindow(QMainWindow):
         </div>
 
         <p>The customized WA+ framework thus takes into account both agricultural and non-irrigated water consumption, water imports and the return of treated wastewater into the basin.</p>
+        """
 
-        <p><img src="{img_path}" width="1000"></p>
-
+    def _methodology_html_part2(self) -> str:
+        return """
         <p>During the data preparation step, various remote sensing datasets and tabular data are acquired from different sources. These datasets are then prepared for input and analyzed to select the most representative datasets for the basin of interest. This involves comparison with available in situ data, and any calibration needed to address systematic errors in the remotely sensed data.</p>
 
         <p>During the second step, the hydrological variability of the basin is characterized by computing various water balance indicators across the watershed using a water balance model. Assessment of the water balance is the core component of the approach; water balance equations are used to describe the flow of water in and out of a system. For the customized WA+ approach for Jordan, the water balance equation is calculated following Equation 4. The change in water storage (ΔS) within a river basin (or sub-basin) is calculated over a monitoring period (Δt) as the difference between the incoming and outgoing water flows. The incoming flows consist of rainfall (precipitation; P) and manmade inflows (Q<sub>in</sub>), and the outgoing flows consist of evapotranspiration (ET), treated waste water returned to stream (Q<sub>wwt</sub>), sectorial water consumption (CW<sub>sec</sub>), and outflows (Q<sub>out</sub>).</p>
