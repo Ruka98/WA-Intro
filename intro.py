@@ -342,62 +342,174 @@ class IntroWindow(QMainWindow):
 
         <table border="1" cellspacing="0" cellpadding="8" width="100%" style="border-collapse:collapse;">
           <tr style="background:#EAF2F8;">
-            <th width="22%">Variable</th>
-            <th width="38%">Dataset (Official Link)</th>
-            <th width="40%">Use in WA+</th>
+            <th>Data</th>
+            <th>Scale</th>
+            <th>Source</th>
+            <th>Data Description</th>
           </tr>
           <tr>
-            <td>Precipitation</td>
-            <td><a href="https://www.chc.ucsb.edu/data/chirps">CHIRPS</a></td>
-            <td>Main rainfall input (inflows to basin water balance)</td>
-          </tr>
-          <tr style="background:#F9F9F9;">
-            <td>Evapotranspiration</td>
-            <td><a href="https://earlywarning.usgs.gov/fews/evaporation">SSEBop (USGS/FEWS NET)</a>, MODIS MOD16, GLEAM</td>
-            <td>Actual consumptive use (water depletion / ETa)</td>
+            <td>Elevation (DEM)</td>
+            <td>90 m</td>
+            <td>U.S Geological Survey- HydroSHEDS</td>
+            <td>Digital Elevation model</td>
           </tr>
           <tr>
-            <td>Vegetation & Biomass</td>
-            <td><a href="https://modis.gsfc.nasa.gov/data/dataprod/mod13.php">MODIS NDVI / LAI</a></td>
-            <td>Crop growth, biomass proxies; supports productivity estimates</td>
-          </tr>
-          <tr style="background:#F9F9F9;">
-            <td>Topography (DEM)</td>
-            <td><a href="https://lpdaac.usgs.gov/products/nasadem_hgtv001/">SRTM / NASADEM</a></td>
-            <td>Basin boundaries, flow routing, sub-basin analysis</td>
+            <td>Landuse</td>
+            <td>250 m</td>
+            <td><a href="https://wapor.apps.fao.org/catalog/">FAO WaPOR database</a></td>
+            <td>Landuse for year 2018-2022</td>
           </tr>
           <tr>
-            <td>Surface Water</td>
-            <td><a href="https://global-surface-water.appspot.com">JRC Global Surface Water</a></td>
-            <td>Open-water extent, reservoir & lake dynamics (supports ET/open water & storage)</td>
-          </tr>
-          <tr style="background:#F9F9F9;">
-            <td>Soil Moisture</td>
-            <td><a href="https://climate.esa.int/en/projects/soil-moisture/">ESA CCI Soil Moisture</a></td>
-            <td>Soil water balance; constrains infiltration/availability</td>
+            <td>MSWEP Precipitation</td>
+            <td>0.1°</td>
+            <td><a href="https://www.gloh2o.org/mswep/">GloH2O MSWEP</a></td>
+            <td>MSWEP is a global precipitation product with a 3 hourly 0.1° resolution available from 1979 to ~3 hours from real-time</td>
           </tr>
           <tr>
-            <td>Total Water Storage / GW</td>
-            <td><a href="https://grace.jpl.nasa.gov/data">NASA GRACE / GRACE-FO</a></td>
-            <td>Independent check on ΔStorage; groundwater trend signals</td>
+            <td>CHIRPS Precipitation</td>
+            <td>5 km resolution, Daily and monthly temporal resolution</td>
+            <td>The Climate Hazards Group, The University of California, Santa Barbara, <a href="https://www.chc.ucsb.edu/data/chirps">CHIRPS</a></td>
+            <td>Climate Hazards Group InfraRed Precipitation with Station data</td>
           </tr>
-          <tr style="background:#F9F9F9;">
-            <td>Land Cover / Use</td>
-            <td><a href="https://climate.esa.int/en/projects/land-cover/">ESA CCI Land Cover</a></td>
-            <td>Stratification of WA+ sheets by land use classes</td>
+          <tr>
+            <td>Actual Evapotranspiration GLEAM</td>
+            <td>0.25 degrees</td>
+            <td><a href="https://www.gleam.eu/">GLEAM</a></td>
+            <td>The Global Land Evaporation Amsterdam Model (GLEAM) is a satellite remote sensing-based set of algorithms dedicated to the estimation of evaporation and soil moisture at global scales (Miralles et al. 2011)</td>
+          </tr>
+          <tr>
+            <td>Actual Evapotranspiration ETAV6</td>
+            <td>1-kilometer (km)</td>
+            <td></td>
+            <td>Actual ET (ETa) is produced using the operational Simplified Surface Energy Balance (SSEBop) model</td>
+          </tr>
+          <tr>
+            <td>Actual Evapotranspiration MOD16</td>
+            <td>500 meter (m)</td>
+            <td><a href="https://modis.gsfc.nasa.gov/data/">NASA MODIS</a></td>
+            <td>The algorithm used for the MOD16 data product collection is based on the logic of the Penman-Monteith equation</td>
+          </tr>
+          <tr>
+            <td>Actual Evapotranspiration WaPOR</td>
+            <td>250m (0.00223 degree), Monthly</td>
+            <td><a href="https://wapor.apps.fao.org/catalog/WAPOR_2">FAO WaPOR database</a></td>
+            <td>The calculation of the ETIa is based on the ETLook model described in Bastiaanssen et al. (2012). The monthy total is obtained by taking the ETIa in mm/day, multiplying by the number of days in a dekad, and summing the dekads of each month</td>
+          </tr>
+          <tr>
+            <td>Potential Evaporation GLEAM</td>
+            <td>0.25 degrees</td>
+            <td><a href="https://www.gleam.eu/">GLEAM</a></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Reference ET Wapor</td>
+            <td>Approximately 20km (0.17 degree),Monthly</td>
+            <td><a href="https://wapor.apps.fao.org/catalog/WAPOR_2/">FAO WaPOR database</a></td>
+            <td>Data component developed through collaboration with the FRAME Consortium. <a href="http://www.fao.org/in-action/remote-sensing-for-water-productivity/en/">More info</a></td>
+          </tr>
+          <tr>
+            <td>Leaf Area Index (LAI) MOD15A2</td>
+            <td>500m monthly</td>
+            <td><a href="https://lpdaac.usgs.gov/">NASA LP DAAC</a></td>
+            <td>NASA Moderate Resolution Imaging Spectroradiometer  MODIS Product</td>
+          </tr>
+          <tr>
+            <td>Net Primary Productivity (NPP) MOD17A3</td>
+            <td>500m Yearly</td>
+            <td><a href="https://lpdaac.usgs.gov/">NASA LP DAAC</a></td>
+            <td>NASA Moderate Resolution Imaging Spectroradiometer  MODIS Product</td>
+          </tr>
+          <tr>
+            <td>Gross Primary Productivity (GPP) MOD17A2</td>
+            <td>500m monthly</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Normalized Dry Matter NDM</td>
+            <td>500m monthly</td>
+            <td></td>
+            <td>Created using NPP and GPP data</td>
+          </tr>
+          <tr>
+            <td>Global Map of Irrigation Areas (GMIA)</td>
+            <td>5 arc minutes</td>
+            <td><a href="https://data.apps.fao.org/map/catalog/srv/eng/catalog.search?uuid=f79213a0-88fd-11da-a88f-000d939bc5d8#/metadata/f79213a0-88fd-11da-a88f-000d939bc5d8">FAO GMIA</a></td>
+            <td>The map shows the amount of area equipped for irrigation around the turn of the 20th century as a percentage of the total area on a Raster with a resolution of 5 arc minutes</td>
+          </tr>
+          <tr>
+            <td>Population Data</td>
+            <td>100m</td>
+            <td><a href="https://hub.worldpop.org/">WorldPop</a></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Environmental Water Requirements</td>
+            <td>10 km resolution</td>
+            <td><a href="https://waterdata.iwmi.org/">IWMI Water Data</a></td>
+            <td>Environmental water requirements for sustaining ecological processes and biodiversity</td>
+          </tr>
+          <tr>
+            <td>saturated soil moisture content (theta(sat)</td>
+            <td>~1km</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Protected Areas (WDPA)</td>
+            <td>Shapefile</td>
+            <td><a href="https://www.protectedplanet.net/en/thematic-areas/wdpa?tab=WDPA">Protected Planet (WDPA)</a></td>
+            <td>Joint project between UN Environment Programme and the International Union for Conservation of Nature (IUCN)</td>
+          </tr>
+          <tr>
+            <td>Basin Imports</td>
+            <td>Monthly time series(2018-2022)</td>
+            <td>Assembled by MWI Jordan</td>
+            <td>Water imports for domestic use to various Governorates in Jordan</td>
+          </tr>
+          <tr>
+            <td>Consumptions</td>
+            <td>Monthly time series(2018-2022)</td>
+            <td>Assembled by MWI Jordan</td>
+            <td>Water Consumption for Domestic, Industrial, Tourism and Livestock</td>
+          </tr>
+          <tr>
+            <td>Treated wastewater</td>
+            <td>Monthly time series(2018-2022)</td>
+            <td>Assembled by MWI Jordan</td>
+            <td>Wastewater influent and effluent discharged to streams as return flow</td>
+          </tr>
+          <tr>
+            <td>Outflow data</td>
+            <td>Monthly time series(2018-2022)</td>
+            <td>Assembled by MWI Jordan</td>
+            <td>Streamflow discharge from spring and rivers</td>
+          </tr>
+          <tr>
+            <td>Shapefiles( Surface basins, Governorates and Country )</td>
+            <td></td>
+            <td>Assembled by MWI Jordan</td>
+            <td>Surface basins, Governorates and Country</td>
+          </tr>
+          <tr>
+            <td>Pan and Piche- difference Evaporation data</td>
+            <td>stations, Daily time Series (2010-2022)</td>
+            <td>Assembled by MWI Jordan</td>
+            <td>Measured ET data for various gauge stations within the Jordan</td>
+          </tr>
+          <tr>
+            <td>Rainfall data</td>
+            <td>stations, Daily time Series (2010-2022)</td>
+            <td>Assembled by MWI Jordan</td>
+            <td>Measured rainfall data for various gauge stations within the Jordan</td>
           </tr>
         </table>
-
-        <p style="margin-top:10px;">
-          <b>Notes for practitioners:</b> ET can be multi-sourced (e.g., SSEBop, MOD16, GLEAM) and ensembled for robustness.
-          Land-use may combine global layers with national maps (irrigated areas, protected areas, crop masks) for best accuracy.
-        </p>
         """
 
     def _references_html(self) -> str:
         return """
         <h2 style="color:#2E86C1;">References & Credits</h2>
-        <p><b>Developed by:</b> Water Accounting Team, International Water Management Institute (IWMI), with partners.</p>
+        <p><b>Developed by:</b> Water Accounting Team, International Water Management Institute (IWMI), with partners MWI- Jordan, and WEC Team _ Jordan.</p>
 
         <h3 style="color:#2874A6;">Key References (selected)</h3>
         <ul>
@@ -414,14 +526,16 @@ class IntroWindow(QMainWindow):
 
         <h3 style="color:#2874A6;">Data Portals (again)</h3>
         <ul>
-          <li><a href="https://www.chc.ucsb.edu/data/chirps">CHIRPS precipitation</a></li>
-          <li><a href="https://earlywarning.usgs.gov/fews/evaporation">SSEBop evapotranspiration</a></li>
-          <li><a href="https://modis.gsfc.nasa.gov/data/dataprod/mod13.php">MODIS NDVI / LAI</a></li>
-          <li><a href="https://lpdaac.usgs.gov/products/nasadem_hgtv001/">SRTM / NASADEM DEM</a></li>
-          <li><a href="https://global-surface-water.appspot.com">JRC Global Surface Water</a></li>
-          <li><a href="https://climate.esa.int/en/projects/soil-moisture/">ESA CCI Soil Moisture</a></li>
-          <li><a href="https://grace.jpl.nasa.gov/data">NASA GRACE / GRACE-FO</a></li>
-          <li><a href="https://climate.esa.int/en/projects/land-cover/">ESA CCI Land Cover</a></li>
+          <li><a href="https://wapor.apps.fao.org/catalog/">FAO WaPOR</a></li>
+          <li><a href="https://www.gloh2o.org/mswep/">GloH2O MSWEP</a></li>
+          <li><a href="https://www.chc.ucsb.edu/data/chirps">CHIRPS</a></li>
+          <li><a href="https://www.gleam.eu/">GLEAM</a></li>
+          <li><a href="https://modis.gsfc.nasa.gov/data/">NASA MODIS</a></li>
+          <li><a href="https://lpdaac.usgs.gov/">NASA LP DAAC</a></li>
+          <li><a href="https://data.apps.fao.org/map/catalog/srv/eng/catalog.search?uuid=f79213a0-88fd-11da-a88f-000d939bc5d8#/metadata/f79213a0-88fd-11da-a88f-000d939bc5d8">FAO GMIA</a></li>
+          <li><a href="https://hub.worldpop.org/">WorldPop</a></li>
+          <li><a href="https://waterdata.iwmi.org/">IWMI Water Data</a></li>
+          <li><a href="https://www.protectedplanet.net/en/thematic-areas/wdpa?tab=WDPA">Protected Planet (WDPA)</a></li>
         </ul>
 
         <h3 style="color:#2874A6;">Credits & License</h3>
