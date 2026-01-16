@@ -1,5 +1,5 @@
 # intro.py
-# WA+ Water Accounting Framework (IWMI) — Intro / Welcome window
+# WA+ Water Accounting Framework (IWMI) - Intro / Welcome window
 # - Overview & Workflow refined for both non-technical and technical users
 # - Methodology shown as flowcharts + concise details
 # - Data Sources tab with authoritative links
@@ -7,6 +7,7 @@
 # - Uses QTextBrowser (links work), styled, scrollable
 
 import sys
+import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel,
     QPushButton, QScrollArea, QTabWidget, QTextBrowser
@@ -18,7 +19,7 @@ from PyQt5.QtGui import QFont
 class IntroWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("WA+ Water Accounting Framework — International Water Management Institute (IWMI)")
+        self.setWindowTitle("WA+ Water Accounting Framework - International Water Management Institute (IWMI)")
         self.setGeometry(100, 100, 1000, 780)
 
         main = QWidget()
@@ -167,7 +168,7 @@ class IntroWindow(QMainWindow):
 
         <div style="background:#EBF5FB; padding:12px; border-left:5px solid #2E86C1; margin:12px 0;">
             <p style="margin:0;">
-            <b>For non-technical users:</b> WA+ is like a financial account for water — tracking each inflow,
+            <b>For non-technical users:</b> WA+ is like a financial account for water - tracking each inflow,
             outflow, and change in storage to build trust and support fair allocation.<br><br>
             <b>For technical users:</b> WA+ provides consistent definitions, spatially explicit datasets, and
             reproducible calculations for basin-scale auditing, with options to validate against independent observations.
@@ -191,14 +192,14 @@ class IntroWindow(QMainWindow):
 
         <h3 style="color:#2874A6;">WA+ Sheets (standard outputs)</h3>
         <ul>
-            <li><b>Sheet 1 — Resource Base:</b> Precipitation & inflows, outflows, ΔStorage</li>
-            <li><b>Sheet 2 — Evapotranspiration (Use):</b> ETa by land use; beneficial vs. non-beneficial</li>
+            <li><b>Sheet 1 - Resource Base:</b> Precipitation & inflows, outflows, ΔStorage</li>
+            <li><b>Sheet 2 - Evapotranspiration (Use):</b> ETa by land use; beneficial vs. non-beneficial</li>
         </ul>
         """
 
     def _workflow_html(self) -> str:
         return """
-        <h2 style="color:#2E86C1;">WA+ Workflow — End-to-End</h2>
+        <h2 style="color:#2E86C1;">WA+ Workflow - End-to-End</h2>
         <p>WA+ turns heterogeneous data into standard accounts through a transparent, repeatable process.</p>
 
         <div style="background:#F8F9F9; padding:14px; border:1px solid #E5E7E9; border-radius:8px;">
@@ -220,7 +221,11 @@ class IntroWindow(QMainWindow):
         """
 
     def _methodology_flowcharts_html(self) -> str:
-        return """
+        # Resolve absolute path to flowchart image
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        img_path = os.path.join(base_dir, "flowchart.svg").replace("\\", "/")
+
+        return f"""
         <h2 style="color:#2E86C1;">Methodology</h2>
         <p>WA+ is a robust framework that harnesses the potential of publicly available remote sensing data to assess water resources and their consumption. Its reliance on such data is particularly beneficial in data scarce areas and transboundary basins. A significant benefit of WA+ lies in its incorporation of land use classification into water resource assessments, promoting a holistic approach to land and water management. This integration is crucial for sustaining food production amidst a changing climate, especially in regions where water is scarce. Notably, WA+ application has predominantly centered on monitoring water consumption in irrigated agriculture.</p>
 
@@ -260,7 +265,7 @@ class IntroWindow(QMainWindow):
 
         <p>The customized WA+ framework thus takes into account both agricultural and non-irrigated water consumption, water imports and the return of treated wastewater into the basin.</p>
 
-        <p><img src="flowchart.svg" width="1000"></p>
+        <p><img src="{img_path}" width="1000"></p>
 
         <p>During the data preparation step, various remote sensing datasets and tabular data are acquired from different sources. These datasets are then prepared for input and analyzed to select the most representative datasets for the basin of interest. This involves comparison with available in situ data, and any calibration needed to address systematic errors in the remotely sensed data.</p>
 
@@ -343,8 +348,8 @@ class IntroWindow(QMainWindow):
 
         <h3 style="color:#2874A6;">Key References (selected)</h3>
         <ul>
-          <li>Karimi, P., Bastiaanssen, W.G.M., et al. (2013). <i>Water Accounting Plus (WA+) — a water accounting procedure for complex river basins.</i></li>
-          <li>IWMI / IHE Delft — WA+ manuals, case studies, and methodological notes.</li>
+          <li>Karimi, P., Bastiaanssen, W.G.M., et al. (2013). <i>Water Accounting Plus (WA+) - a water accounting procedure for complex river basins.</i></li>
+          <li>IWMI / IHE Delft - WA+ manuals, case studies, and methodological notes.</li>
           <li>ET products documentation (SSEBop, MOD16, GLEAM) and CHIRPS precipitation product notes.</li>
         </ul>
 
@@ -367,7 +372,7 @@ class IntroWindow(QMainWindow):
         </ul>
 
         <h3 style="color:#2874A6;">Credits & License</h3>
-        <p>Water Accounting Plus (WA+) Tool — © 2025 IWMI, Water Accounting Team. Licensed under CC BY 4.0.
+        <p>Water Accounting Plus (WA+) Tool - &copy; 2025 IWMI, Water Accounting Team. Licensed under CC BY 4.0.
         For formal publications using WA+ outputs, obtain prior written permission from IWMI as per the included license.</p>
         """
 
