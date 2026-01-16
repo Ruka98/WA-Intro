@@ -11,7 +11,7 @@ import os
 import base64
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel,
-    QPushButton, QScrollArea, QTabWidget, QTextBrowser
+    QPushButton, QScrollArea, QTabWidget, QTextBrowser, QSizePolicy
 )
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtCore import Qt, QTimer
@@ -115,23 +115,41 @@ class IntroWindow(QMainWindow):
         v_layout = QVBoxLayout()
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
+
+        # Create a single seamless content widget with white background
         content_widget = QWidget()
+        content_widget.setStyleSheet("background-color: white;")
         content_layout = QVBoxLayout()
+        # Add some padding around the edges
+        content_layout.setContentsMargins(10, 10, 10, 10)
 
         # Part 1: Text content before the flowchart
-        text_part1 = self._browser(self._methodology_html_part1())
-        content_layout.addWidget(text_part1)
+        # Use QLabel to ensure it expands fully without internal scrollbars
+        lbl_part1 = QLabel(self._methodology_html_part1())
+        lbl_part1.setWordWrap(True)
+        lbl_part1.setOpenExternalLinks(True)
+        lbl_part1.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.LinksAccessibleByMouse)
+        lbl_part1.setStyleSheet("border: none; padding: 14px;")
+        content_layout.addWidget(lbl_part1)
 
         # Part 2: The flowchart SVG image
         base_dir = os.path.dirname(os.path.abspath(__file__))
         img_path = os.path.join(base_dir, "flowchart.svg")
         svg_widget = QSvgWidget(img_path)
-        svg_widget.setMinimumSize(960, 600)
+        # Fix size to fit comfortably within the 1000px window width (approx 960 viewable)
+        svg_widget.setFixedSize(900, 600)
         content_layout.addWidget(svg_widget, alignment=Qt.AlignCenter)
 
-        # Part 3: Text content after the flowchart
-        text_part2 = self._browser(self._methodology_html_part2())
-        content_layout.addWidget(text_part2)
+        # Part 3: Text content after the flowchart (Caption + Text)
+        lbl_part2 = QLabel(self._methodology_html_part2())
+        lbl_part2.setWordWrap(True)
+        lbl_part2.setOpenExternalLinks(True)
+        lbl_part2.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.LinksAccessibleByMouse)
+        lbl_part2.setStyleSheet("border: none; padding: 14px;")
+        content_layout.addWidget(lbl_part2)
+
+        # Add stretch to push content up if needed (though content is long enough)
+        content_layout.addStretch()
 
         content_widget.setLayout(content_layout)
         scroll.setWidget(content_widget)
