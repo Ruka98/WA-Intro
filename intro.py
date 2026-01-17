@@ -98,16 +98,41 @@ class IntroWindow(QMainWindow):
         self.tabs.addTab(tab, "Overview")
 
     def _add_workflow_tab(self):
-        tab = QWidget(); v = QVBoxLayout()
-        scroll = QScrollArea(); scroll.setWidgetResizable(True)
-        content = QWidget(); cv = QVBoxLayout()
+        tab = QWidget()
+        v_layout = QVBoxLayout()
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
 
-        w = self._browser(self._workflow_html())
-        cv.addWidget(w)
-        content.setLayout(cv)
-        scroll.setWidget(content)
-        v.addWidget(scroll)
-        tab.setLayout(v)
+        content_widget = QWidget()
+        content_widget.setStyleSheet("background-color: white;")
+        content_layout = QVBoxLayout()
+        content_layout.setContentsMargins(10, 10, 10, 10)
+
+        lbl_part1 = QLabel(self._workflow_html_part1())
+        lbl_part1.setWordWrap(True)
+        lbl_part1.setOpenExternalLinks(True)
+        lbl_part1.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.LinksAccessibleByMouse)
+        lbl_part1.setStyleSheet("border: none; padding: 14px;")
+        content_layout.addWidget(lbl_part1)
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        img_path = os.path.join(base_dir, "workflow.svg")
+        svg_widget = QSvgWidget(img_path)
+        svg_widget.setFixedSize(900, 550)
+        content_layout.addWidget(svg_widget, alignment=Qt.AlignCenter)
+
+        lbl_part2 = QLabel(self._workflow_html_part2())
+        lbl_part2.setWordWrap(True)
+        lbl_part2.setOpenExternalLinks(True)
+        lbl_part2.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.LinksAccessibleByMouse)
+        lbl_part2.setStyleSheet("border: none; padding: 14px;")
+        content_layout.addWidget(lbl_part2)
+
+        content_layout.addStretch()
+        content_widget.setLayout(content_layout)
+        scroll.setWidget(content_widget)
+        v_layout.addWidget(scroll)
+        tab.setLayout(v_layout)
         self.tabs.addTab(tab, "Workflow")
 
     def _add_methodology_tab(self):
@@ -155,7 +180,7 @@ class IntroWindow(QMainWindow):
         scroll.setWidget(content_widget)
         v_layout.addWidget(scroll)
         tab.setLayout(v_layout)
-        self.tabs.addTab(tab, "Methodology (Flowcharts)")
+        self.tabs.addTab(tab, "Methodology")
 
     def _add_data_tab(self):
         tab = QWidget(); v = QVBoxLayout()
@@ -233,11 +258,14 @@ class IntroWindow(QMainWindow):
         </ul>
         """
 
-    def _workflow_html(self) -> str:
+    def _workflow_html_part1(self) -> str:
         return """
-        <h2 style="color:#2E86C1;">WA+ Workflow - End-to-End</h2>
+        <h2 style="color:#2E86C1;">Customized Workflow</h2>
         <p>WA+ turns heterogeneous data into standard accounts through a transparent, repeatable process.</p>
+        """
 
+    def _workflow_html_part2(self) -> str:
+        return """
         <div style="background:#F8F9F9; padding:14px; border:1px solid #E5E7E9; border-radius:8px;">
           <h3 style="color:#2874A6; margin-top:0;">High-level stages</h3>
           <ol>
